@@ -27,11 +27,13 @@ type DiscoveryCardBase = {
 };
 
 type DiscoveryLinkCard = DiscoveryCardBase & {
+  kind: 'link';
   href: string;
   tab?: never;
 };
 
 type DiscoveryTabCard = DiscoveryCardBase & {
+  kind: 'tab';
   tab: MediaTab;
   href?: never;
 };
@@ -49,6 +51,7 @@ export function MediaHub({ documents, gitaVerseCount, musicEmbeds, tracks, video
 
   const discoveryCards: DiscoveryCard[] = [
     {
+      kind: 'link',
       title: 'Slokas',
       body: `${slokaCount} published slokas with transliteration, meaning, and Telugu script access.`,
       href: '/slokas',
@@ -56,6 +59,7 @@ export function MediaHub({ documents, gitaVerseCount, musicEmbeds, tracks, video
       imageAlt: 'Krishna image for slokas access',
     },
     {
+      kind: 'link',
       title: 'Stotras',
       body: `${stotraCount} dedicated stotra pages with Telugu and Sanskrit script access.`,
       href: '/stotras',
@@ -63,6 +67,7 @@ export function MediaHub({ documents, gitaVerseCount, musicEmbeds, tracks, video
       imageAlt: 'Shiva image for stotras access',
     },
     {
+      kind: 'tab',
       title: 'Documents',
       body: `${documents.length} PDF resources collected in one reading library.`,
       tab: 'documents',
@@ -70,6 +75,7 @@ export function MediaHub({ documents, gitaVerseCount, musicEmbeds, tracks, video
       imageAlt: 'Temple image for document access',
     },
     {
+      kind: 'tab',
       title: 'Music',
       body: `${tracks.length + musicEmbeds.length} devotional listening options, including local tracks and embedded music.`,
       tab: 'music',
@@ -77,6 +83,7 @@ export function MediaHub({ documents, gitaVerseCount, musicEmbeds, tracks, video
       imageAlt: 'Hanuman image for music access',
     },
     {
+      kind: 'tab',
       title: 'Videos',
       body: `${videos.length} spiritual video entries available from the same hub.`,
       tab: 'videos',
@@ -109,7 +116,7 @@ export function MediaHub({ documents, gitaVerseCount, musicEmbeds, tracks, video
 
       <div className="content-grid card-grid-relaxed media-discovery-grid">
         {discoveryCards.map((card) =>
-          'href' in card ? (
+          card.kind === 'link' ? (
             <Link key={card.title} className="surface-card deity-path-card" href={card.href}>
               <div className="deity-path-card-visual">
                 <Image className="deity-path-card-image" src={card.imageSrc} alt={card.imageAlt} width={1200} height={900} />
