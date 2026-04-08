@@ -19,6 +19,25 @@ type MediaHubProps = {
 };
 
 type MediaTab = 'documents' | 'music' | 'videos';
+type DiscoveryCardBase = {
+  title: string;
+  body: string;
+  imageSrc: string;
+  imageAlt: string;
+};
+
+type DiscoveryLinkCard = DiscoveryCardBase & {
+  href: string;
+  tab?: never;
+};
+
+type DiscoveryTabCard = DiscoveryCardBase & {
+  tab: MediaTab;
+  href?: never;
+};
+
+type DiscoveryCard = DiscoveryLinkCard | DiscoveryTabCard;
+
 const gitaFeatureImageStorageKey = 'divinesv-library-gita-feature-image';
 
 export function MediaHub({ documents, gitaVerseCount, musicEmbeds, tracks, videos }: MediaHubProps) {
@@ -28,7 +47,7 @@ export function MediaHub({ documents, gitaVerseCount, musicEmbeds, tracks, video
   const slokaCount = slokaCategories.reduce((sum, category) => sum + category.items.length, 0);
   const stotraCount = stotraEntries.length;
 
-  const discoveryCards = [
+  const discoveryCards: DiscoveryCard[] = [
     {
       title: 'Slokas',
       body: `${slokaCount} published slokas with transliteration, meaning, and Telugu script access.`,
@@ -46,21 +65,21 @@ export function MediaHub({ documents, gitaVerseCount, musicEmbeds, tracks, video
     {
       title: 'Documents',
       body: `${documents.length} PDF resources collected in one reading library.`,
-      tab: 'documents' as MediaTab,
+      tab: 'documents',
       imageSrc: '/images/Temple2.jpg',
       imageAlt: 'Temple image for document access',
     },
     {
       title: 'Music',
       body: `${tracks.length + musicEmbeds.length} devotional listening options, including local tracks and embedded music.`,
-      tab: 'music' as MediaTab,
+      tab: 'music',
       imageSrc: '/images/hanuman.jpg',
       imageAlt: 'Hanuman image for music access',
     },
     {
       title: 'Videos',
       body: `${videos.length} spiritual video entries available from the same hub.`,
-      tab: 'videos' as MediaTab,
+      tab: 'videos',
       imageSrc: '/images/vishwaroopam.jpg',
       imageAlt: 'Vishwaroopam image for video access',
     },
@@ -90,7 +109,7 @@ export function MediaHub({ documents, gitaVerseCount, musicEmbeds, tracks, video
 
       <div className="content-grid card-grid-relaxed media-discovery-grid">
         {discoveryCards.map((card) =>
-          card.href ? (
+          'href' in card ? (
             <Link key={card.title} className="surface-card deity-path-card" href={card.href}>
               <div className="deity-path-card-visual">
                 <Image className="deity-path-card-image" src={card.imageSrc} alt={card.imageAlt} width={1200} height={900} />
