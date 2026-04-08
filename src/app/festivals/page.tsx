@@ -23,6 +23,12 @@ export default function FestivalsPage() {
           'Dates aligned to 2026 India observance timing',
           'Compact cards now include a visual cue for each celebration',
         ]}
+        imageSrc="/images/Temple6.jpg"
+        imageAlt="Temple festival image for the festivals page"
+        accentTopImageSrc="/images/Krishna7.jpg"
+        accentTopImageAlt="Krishna accent image for the festivals page"
+        accentBottomImageSrc="/images/Devi2.jpg"
+        accentBottomImageAlt="Devi accent image for the festivals page"
       />
 
       <section className="section-spacing">

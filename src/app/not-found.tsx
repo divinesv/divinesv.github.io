@@ -7,8 +7,8 @@ export default function NotFoundPage() {
     <>
       <PageHero
         eyebrow="404 | Page Not Found"
-        title="This path does not lead to a published page"
-        description="The page you requested is not available on DivineSV. You can return to the homepage or continue into one of the devotional sections below."
+        title="Page not found"
+        description="This page is not available."
         asideTitle="Continue With"
         asideItems={[
           'Return to the homepage',
@@ -16,6 +16,8 @@ export default function NotFoundPage() {
           'Open the stotras section',
           'Explore Shiva, Vishnu, Devi, Ganesha, or Hanuman',
         ]}
+        imageSrc="/images/Temple2.jpg"
+        imageAlt="Temple image for the 404 page"
         accentTopImageSrc="/images/krishna.jpg"
         accentTopImageAlt="Krishna accent for the 404 page"
         accentBottomImageSrc="/images/hanuman.jpg"

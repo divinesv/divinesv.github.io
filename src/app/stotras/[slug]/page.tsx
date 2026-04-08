@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { PageHero } from '@/components/page-hero';
+import { StotraVerseCard } from '@/components/stotra-verse-card';
 import { getStotraBySlug, stotraEntries } from '@/lib/stotras';
 
 type StotraPageProps = {
@@ -59,70 +60,10 @@ export default async function StotraDetailPage({ params }: StotraPageProps) {
 
       <section className="section-spacing">
         <div className="stotra-verse-stack">
-          {stotra.verses.map((verse) => (
-            <article key={verse.label} className="surface-card stotra-verse-card">
-              <div className="stotra-verse-header">
-                <span className="card-tag">{stotra.deity}</span>
-                <strong>{verse.label}</strong>
-              </div>
-
-              <div className="stotra-language-grid">
-                <div className="stotra-language-block">
-                  <span className="stotra-language-label">తెలుగు</span>
-                  {verse.telugu.map((line) => (
-                    <p key={line} className="stotra-line stotra-line-telugu">
-                      {line}
-                    </p>
-                  ))}
-                </div>
-
-                <div className="stotra-language-block">
-                  <span className="stotra-language-label">Transliteration</span>
-                  {verse.transliteration.map((line) => (
-                    <p key={line} className="stotra-line">
-                      {line}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div className="stotra-meaning-block">
-                <span className="stotra-language-label">Meaning</span>
-                <p className="page-copy">{verse.meaning}</p>
-              </div>
-            </article>
-          ))}
+          {stotra.verses.map((verse) => <StotraVerseCard key={verse.label} deity={stotra.deity} verse={verse} />)}
 
           {stotra.phalaShruti ? (
-            <article className="surface-card stotra-phala-card">
-              <div className="stotra-verse-header">
-                <span className="card-tag">{stotra.deity}</span>
-                <strong>{stotra.phalaShruti.label}</strong>
-              </div>
-              <div className="stotra-language-grid">
-                <div className="stotra-language-block">
-                  <span className="stotra-language-label">తెలుగు</span>
-                  {stotra.phalaShruti.telugu.map((line) => (
-                    <p key={line} className="stotra-line stotra-line-telugu">
-                      {line}
-                    </p>
-                  ))}
-                </div>
-
-                <div className="stotra-language-block">
-                  <span className="stotra-language-label">Transliteration</span>
-                  {stotra.phalaShruti.transliteration.map((line) => (
-                    <p key={line} className="stotra-line">
-                      {line}
-                    </p>
-                  ))}
-                </div>
-              </div>
-              <div className="stotra-meaning-block">
-                <span className="stotra-language-label">Meaning</span>
-                <p className="page-copy">{stotra.phalaShruti.meaning}</p>
-              </div>
-            </article>
+            <StotraVerseCard deity={stotra.deity} verse={stotra.phalaShruti} />
           ) : null}
         </div>
       </section>

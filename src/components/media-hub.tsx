@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { devotionalImagePools, pickImage } from '@/lib/devotional-images';
+import { slokaCategories } from '@/lib/slokas';
+import { stotraEntries } from '@/lib/stotras';
 import type { PdfDocument } from '@/lib/site-types';
 import type { MediaTrack, MediaVideo, MusicEmbed } from '@/lib/media';
 
@@ -23,6 +25,46 @@ export function MediaHub({ documents, gitaVerseCount, musicEmbeds, tracks, video
   const [tab, setTab] = useState<MediaTab>('documents');
   const [gitaFeatureImageIndex, setGitaFeatureImageIndex] = useState(0);
   const gitaFeatureImage = pickImage(devotionalImagePools.gita, gitaFeatureImageIndex);
+  const slokaCount = slokaCategories.reduce((sum, category) => sum + category.items.length, 0);
+  const stotraCount = stotraEntries.length;
+
+  const discoveryCards = [
+    {
+      title: 'Slokas',
+      body: `${slokaCount} published slokas with transliteration, meaning, and Telugu script access.`,
+      href: '/slokas',
+      imageSrc: '/images/gita-krishna.jpg',
+      imageAlt: 'Krishna image for slokas access',
+    },
+    {
+      title: 'Stotras',
+      body: `${stotraCount} dedicated stotra pages with Telugu and Sanskrit script access.`,
+      href: '/stotras',
+      imageSrc: '/images/shiva.jpg',
+      imageAlt: 'Shiva image for stotras access',
+    },
+    {
+      title: 'Documents',
+      body: `${documents.length} PDF resources collected in one reading library.`,
+      tab: 'documents' as MediaTab,
+      imageSrc: '/images/Temple2.jpg',
+      imageAlt: 'Temple image for document access',
+    },
+    {
+      title: 'Music',
+      body: `${tracks.length + musicEmbeds.length} devotional listening options, including local tracks and embedded music.`,
+      tab: 'music' as MediaTab,
+      imageSrc: '/images/hanuman.jpg',
+      imageAlt: 'Hanuman image for music access',
+    },
+    {
+      title: 'Videos',
+      body: `${videos.length} spiritual video entries available from the same hub.`,
+      tab: 'videos' as MediaTab,
+      imageSrc: '/images/vishwaroopam.jpg',
+      imageAlt: 'Vishwaroopam image for video access',
+    },
+  ];
 
   useEffect(() => {
     const raw = window.sessionStorage.getItem(gitaFeatureImageStorageKey);
@@ -34,9 +76,50 @@ export function MediaHub({ documents, gitaVerseCount, musicEmbeds, tracks, video
     setGitaFeatureImageIndex(normalizedIndex);
   }, []);
 
+  const openTab = (nextTab: MediaTab) => {
+    setTab(nextTab);
+    document.getElementById('library-tabs')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
-    <section className="section-spacing">
-      <div className="admin-tabs media-tabs" role="tablist" aria-label="Library and media categories">
+    <section className="section-spacing media-hub-shell">
+      <div className="section-heading">
+        <span className="eyebrow">Everything in One Place</span>
+        <h2 className="section-title">Choose the format you want</h2>
+      </div>
+
+      <div className="content-grid card-grid-relaxed media-discovery-grid">
+        {discoveryCards.map((card) =>
+          card.href ? (
+            <Link key={card.title} className="surface-card deity-path-card" href={card.href}>
+              <div className="deity-path-card-visual">
+                <Image className="deity-path-card-image" src={card.imageSrc} alt={card.imageAlt} width={1200} height={900} />
+                <div className="deity-path-card-overlay">
+                  <h3 className="card-title deity-path-card-title">{card.title}</h3>
+                </div>
+              </div>
+              <p>{card.body}</p>
+            </Link>
+          ) : (
+            <button
+              key={card.title}
+              className="surface-card deity-path-card media-discovery-button"
+              type="button"
+              onClick={() => openTab(card.tab)}
+            >
+              <div className="deity-path-card-visual">
+                <Image className="deity-path-card-image" src={card.imageSrc} alt={card.imageAlt} width={1200} height={900} />
+                <div className="deity-path-card-overlay">
+                  <h3 className="card-title deity-path-card-title">{card.title}</h3>
+                </div>
+              </div>
+              <p>{card.body}</p>
+            </button>
+          ),
+        )}
+      </div>
+
+      <div className="admin-tabs media-tabs media-tabs-row" id="library-tabs" role="tablist" aria-label="Library and media categories">
         <button
           type="button"
           role="tab"
@@ -68,10 +151,10 @@ export function MediaHub({ documents, gitaVerseCount, musicEmbeds, tracks, video
 
       {tab === 'documents' ? (
         <div className="admin-tab-panel media-panel">
-          <article className="library-feature-card">
+          <article className="library-feature-card library-feature-card-mobile-overlay">
             <div className="library-feature-copy">
               <span className="card-tag">Bhagavad Gita</span>
-              <h2 className="card-title">A living sloka companion built from your earlier project</h2>
+              <h2 className="card-title">Bhagavad Gita companion</h2>
               <p className="page-copy">
                 Explore a visually richer Bhagavad Gita experience with Krishna, Arjuna, and Vishwaroopam imagery, mood-led
                 verse guidance, transliteration, translation, and commentary.

@@ -21,6 +21,12 @@ export default function ContactPage() {
           'Suggestions for new PDFs, pages, or temple features',
           'Questions about DivineSV resources and updates',
         ]}
+        imageSrc="/images/Temple7.jpg"
+        imageAlt="Temple lamp and shrine image for the contact page"
+        accentTopImageSrc="/images/ganesha.jpg"
+        accentTopImageAlt="Ganesha accent image for the contact page"
+        accentBottomImageSrc="/images/hanuman.jpg"
+        accentBottomImageAlt="Hanuman accent image for the contact page"
       />
 
       <section className="section-spacing">

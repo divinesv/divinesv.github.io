@@ -23,6 +23,8 @@ export default function StotrasPage() {
         asideTitle="Starter Library"
         asideItems={stotraItems}
         asideClassName="page-hero-aside-stotras"
+        imageSrc="/images/AdiShankaracharya.jpg"
+        imageAlt="Adi Shankaracharya image for the stotras page"
         accentTopImageSrc="/images/krishna.jpg"
         accentTopImageAlt="Krishna accent for the stotras page"
         accentBottomImageSrc="/images/hanuman.jpg"

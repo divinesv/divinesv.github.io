@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 
 import { navItems } from '@/lib/site-data';
 
-const mobileNavBreakpoint = 1280;
+const mobileNavBreakpoint = 1360;
 
 export function MainNav() {
   const pathname = usePathname() ?? '/';

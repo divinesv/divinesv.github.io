@@ -23,8 +23,8 @@ export function rotateImages(images: readonly DevotionalImage[], offset = 0): De
 export const devotionalImagePools = {
   shiva: [
     createImage('/images/shiva.jpg', 'Shiva devotional image'),
-    createImage('/images/ShivaBg.png', 'Shiva silhouette devotional artwork'),
-    createImage('/images/shiva-parvati.jpg', 'Shiva and Parvati devotional image'),
+    createImage('/images/shiva2.jpeg', 'Shiva sacred portrait'),
+    createImage('/images/shiva5.jpg', 'Shiva devotional artwork'),
     createImage('/images/Kailash.jpg', 'Kailash mountain sacred image'),
   ],
   vishnu: [

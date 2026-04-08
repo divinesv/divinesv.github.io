@@ -9,7 +9,7 @@ type DevotionalGalleryProps = {
 };
 
 export function DevotionalGallery({ eyebrow, title, images }: DevotionalGalleryProps) {
-  const galleryImages = images.slice(0, 4);
+  const galleryImages = images;
 
   if (!galleryImages.length) {
     return null;

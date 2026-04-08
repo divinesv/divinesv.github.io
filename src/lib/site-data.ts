@@ -42,6 +42,7 @@ export const navItems: NavItem[] = [
   },
   { href: '/festivals', label: 'Festivals' },
   { href: '/stotras', label: 'Stotras' },
+  { href: '/slokas', label: 'Slokas' },
   { href: '/library', label: 'Library' },
   { href: '/contact', label: 'Contact' },
 ];
@@ -52,7 +53,7 @@ export const deityCards: FeatureCard[] = [
     subtitle: 'Mahadeva | Maheshvara | శివుడు',
     body: 'A meditative entry point for Rudra, Kailasa, Nataraja, jyotirlingas, mantras, and sacred symbolism.',
     href: '/shiva',
-    imageSrc: '/images/shiva-parvati.jpg',
+    imageSrc: '/images/shiva5.jpg',
     imageAlt: 'Shiva devotional image for the Shiva pathway',
   },
   {

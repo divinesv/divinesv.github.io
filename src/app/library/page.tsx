@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
 
+import { DraggableFloatingImage } from '@/components/draggable-floating-image';
 import { MediaHub } from '@/components/media-hub';
-import { PageHero } from '@/components/page-hero';
 import { bhagavadGitaStats } from '@/lib/bhagavad-gita';
 import { devotionalImagePools, pickImage } from '@/lib/devotional-images';
 import { getMusicTracks, mediaVideos, musicEmbeds } from '@/lib/media';
@@ -15,27 +17,57 @@ export const metadata: Metadata = {
 
 export default async function LibraryPage() {
   const [library, tracks] = await Promise.all([getPdfLibrary(), getMusicTracks()]);
+  const overviewImage = pickImage(devotionalImagePools.temples, 1);
 
   return (
     <>
-      <PageHero
-        eyebrow="Library and Media"
-        title="Read, listen, and reflect in one sacred space"
-        description="A single destination for devotional documents, downloadable PDFs, immersive scripture study, music, and spiritual videos."
-        asideTitle="Mandir Collection"
-        asideItems={[
-          `${library.length} public PDFs currently published`,
-          `${tracks.length} local devotional tracks ready to play`,
-          `${mediaVideos.length} embedded spiritual video available now`,
-          `${bhagavadGitaStats.verseCount} Bhagavad Gita verses available in the new companion`,
-        ]}
-        imageSrc={pickImage(devotionalImagePools.temples, 1).src}
-        imageAlt={pickImage(devotionalImagePools.temples, 1).alt}
-        accentTopImageSrc={pickImage(devotionalImagePools.gita, 3).src}
-        accentTopImageAlt={pickImage(devotionalImagePools.gita, 3).alt}
-        accentBottomImageSrc={pickImage(devotionalImagePools.krishna, 5).src}
-        accentBottomImageAlt={pickImage(devotionalImagePools.krishna, 5).alt}
-      />
+      <section className="section-spacing">
+        <article className="library-feature-card library-feature-card-mobile-overlay library-overview-card">
+          <div className="library-feature-copy">
+            <span className="eyebrow">Library and Media</span>
+            <h1 className="page-title">Read, listen, and reflect in one sacred space</h1>
+            <p className="page-copy">
+              A single destination for slokas, stotras, devotional documents, scripture study, music, and spiritual videos.
+            </p>
+            <div className="library-feature-pills">
+              <span className="footer-blessing">{library.length} PDFs</span>
+              <span className="footer-blessing">{tracks.length} audio tracks</span>
+              <span className="footer-blessing">{mediaVideos.length} videos</span>
+              <span className="footer-blessing">{bhagavadGitaStats.verseCount} Gita verses</span>
+            </div>
+            <div className="link-row">
+              <Link className="primary-link" href="/slokas">
+                Open Slokas
+              </Link>
+              <Link className="secondary-link" href="/stotras">
+                Open Stotras
+              </Link>
+            </div>
+          </div>
+
+          <div className="library-feature-media page-hero-aside">
+            <DraggableFloatingImage
+              className="page-hero-float page-hero-float-top"
+              imageClassName="page-hero-float-image"
+              src="/images/Temple5.jpg"
+              alt="Temple accent for the library page"
+              width={420}
+              height={520}
+            />
+            <DraggableFloatingImage
+              className="page-hero-float page-hero-float-bottom"
+              imageClassName="page-hero-float-image"
+              src="/images/gita-krishna.jpg"
+              alt="Krishna accent for the library page"
+              width={420}
+              height={520}
+            />
+            <div className="library-feature-visual library-feature-visual-large">
+              <Image className="library-feature-image" src={overviewImage.src} alt={overviewImage.alt} width={1100} height={900} />
+            </div>
+          </div>
+        </article>
+      </section>
 
       <MediaHub
         documents={library}

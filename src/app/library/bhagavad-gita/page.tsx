@@ -24,6 +24,10 @@ export default function BhagavadGitaPage() {
         asideItems={[]}
         imageSrc="/images/gita-vishwaroopam.jpg"
         imageAlt="Bhagavad Gita Vishwaroopam visual"
+        accentTopImageSrc="/images/gita-krishna.jpg"
+        accentTopImageAlt="Krishna accent image for the Bhagavad Gita page"
+        accentBottomImageSrc="/images/gita-arjuna.jpg"
+        accentBottomImageAlt="Arjuna accent image for the Bhagavad Gita page"
       >
         <div className="link-row">
           <Link className="secondary-link" href="/library">

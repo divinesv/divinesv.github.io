@@ -22,6 +22,12 @@ export default function AboutPage() {
           'Telugu terms included for familiarity and regional connection',
           'A respectful style suited for spiritual reading and cultural learning',
         ]}
+        imageSrc="/images/god.jpg"
+        imageAlt="Devotional image for the DivineSV about page"
+        accentTopImageSrc="/images/AdiShankaracharya.jpg"
+        accentTopImageAlt="Adi Shankaracharya accent image for the about page"
+        accentBottomImageSrc="/images/krishna.jpg"
+        accentBottomImageAlt="Krishna accent image for the about page"
       >
         <div className="link-row">
           <Link className="primary-link" href="/shiva">

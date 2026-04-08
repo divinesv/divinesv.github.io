@@ -12,6 +12,7 @@ const footerPracticeLinks = [
   { href: '/library', label: 'Library', icon: 'fa-solid fa-book-open' },
   { href: '/library/bhagavad-gita', label: 'Bhagavad Gita', icon: 'fa-solid fa-om' },
   { href: '/stotras', label: 'Stotras', icon: 'fa-solid fa-hands-praying' },
+  { href: '/slokas', label: 'Slokas', icon: 'fa-solid fa-scroll' },
   { href: '/festivals', label: 'Festivals', icon: 'fa-solid fa-calendar-days' },
 ];
 

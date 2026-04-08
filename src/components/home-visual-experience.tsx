@@ -240,12 +240,15 @@ export function HomeVisualExperience() {
 
   return (
     <>
-      <section className="hero-premium section-spacing">
-        <div className="hero-premium-shell">
-          <div className="hero-premium-copy devotional-panel">
+      <section className="section-spacing">
+        <article
+          className="library-feature-card library-feature-card-mobile-overlay library-overview-card page-hero-shell page-hero-shell-has-image home-hero-card"
+          key={scene.key}
+        >
+          <div className="library-feature-copy page-hero-main home-hero-copy">
             <span className="eyebrow">Om Namo Narayanaya | Om Namah Shivaya</span>
-            <h1 className="hero-title">A Home for Bhakti and Wisdom</h1>
-            <p className="hero-copy">
+            <h1 className="page-title">A Home for Bhakti and Wisdom</h1>
+            <p className="page-copy">
               A prayerful space for darshan, stotras, sacred stories, and quiet reflection. DivineSV gathers
               the grace of Shiva, Vishnu, Devi, Ganesha, Hanuman, and the wider stream of Sanatana Dharma
               in a spirit of reverence, devotion, and inner stillness.
@@ -259,32 +262,23 @@ export function HomeVisualExperience() {
                 View Stotras
               </Link>
             </div>
-
           </div>
 
-          <aside className="hero-stage" key={scene.key}>
-            <div className="hero-stage-orb hero-stage-orb-one" />
-            <div className="hero-stage-orb hero-stage-orb-two" />
-            <div className="hero-stage-orb hero-stage-orb-three" />
-
-            <div className="hero-stage-main">
+          <div className="library-feature-media page-hero-aside home-hero-media">
+            <div className="library-feature-visual library-feature-visual-large page-hero-image-frame home-hero-visual">
               <Image
-                className="hero-stage-image"
+                className="library-feature-image page-hero-image home-hero-image"
                 src={scene.main.image}
                 alt={scene.main.alt}
                 width={1400}
                 height={1000}
                 priority
               />
-              <div className="hero-stage-main-overlay">
-                <span className="pill">{scene.main.badge}</span>
-                <p className="body-copy">{scene.main.copy}</p>
-              </div>
             </div>
 
             <DraggableFloatingImage
-              className="hero-stage-float hero-stage-float-top"
-              imageClassName="hero-stage-image"
+              className="page-hero-float page-hero-float-top"
+              imageClassName="page-hero-float-image"
               src={scene.top.image}
               alt={scene.top.alt}
               width={1200}
@@ -292,15 +286,15 @@ export function HomeVisualExperience() {
             />
 
             <DraggableFloatingImage
-              className="hero-stage-float hero-stage-float-bottom"
-              imageClassName="hero-stage-image"
+              className="page-hero-float page-hero-float-bottom"
+              imageClassName="page-hero-float-image"
               src={scene.bottom.image}
               alt={scene.bottom.alt}
               width={1200}
               height={900}
             />
-          </aside>
-        </div>
+          </div>
+        </article>
       </section>
 
       <section className="section-spacing">

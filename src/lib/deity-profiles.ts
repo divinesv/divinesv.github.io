@@ -12,7 +12,7 @@ function collectGalleryImages(...imageGroups: ReadonlyArray<readonly DevotionalI
     return true;
   });
 
-  return images.slice(0, 4);
+  return images;
 }
 
 export const deityProfiles = {
