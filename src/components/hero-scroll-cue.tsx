@@ -2,6 +2,8 @@
 
 import type { MouseEvent } from 'react';
 
+import { ChevronDownIcon } from '@/components/icons';
+
 export function HeroScrollCue() {
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
@@ -17,7 +19,7 @@ export function HeroScrollCue() {
   return (
     <a className="hero-scroll-cue" href="#" onClick={handleClick} aria-label="Scroll to explore">
       <span className="hero-scroll-cue-line" aria-hidden="true" />
-      <span className="hero-scroll-cue-chevron" aria-hidden="true">⌄</span>
+      <ChevronDownIcon className="hero-scroll-cue-chevron" />
     </a>
   );
 }

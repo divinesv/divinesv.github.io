@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { DevotionalGallery } from '@/components/devotional-gallery';
+import { ArrowRightIcon } from '@/components/icons';
 import { PageHero } from '@/components/page-hero';
 import type { DevotionalImage } from '@/lib/devotional-images';
 import { getNextDeityLink, type DeitySlug } from '@/lib/deity-profiles';
@@ -84,7 +85,7 @@ export function DeityProfilePage({ profile, slug }: DeityProfilePageProps) {
         <Link className="deity-next-link" href={nextDeity.href}>
           <span className="deity-next-eyebrow">Continue the pantheon</span>
           <span className="deity-next-title">{nextDeity.eyebrow}</span>
-          <span className="deity-next-arrow" aria-hidden="true">→</span>
+          <ArrowRightIcon className="deity-next-arrow" />
         </Link>
       </section>
     </>

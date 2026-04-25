@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
+import { ChevronLeftIcon, ChevronRightIcon } from '@/components/icons';
 import type { DevotionalImage } from '@/lib/devotional-images';
 
 type DevotionalGalleryProps = {
@@ -12,47 +13,98 @@ type DevotionalGalleryProps = {
 };
 
 export function DevotionalGallery({ eyebrow, title, images }: DevotionalGalleryProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const realCount = images.length;
+  const [position, setPosition] = useState(1);
+  const [enableTransition, setEnableTransition] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
 
+  const realIndex =
+    realCount === 0
+      ? 0
+      : position === 0
+        ? realCount - 1
+        : position === realCount + 1
+          ? 0
+          : position - 1;
+
   useEffect(() => {
-    setActiveIndex(0);
+    setEnableTransition(false);
+    setPosition(1);
   }, [images]);
 
   useEffect(() => {
-    if (images.length < 2 || isHovered) {
-      return;
-    }
+    if (enableTransition) return;
+    const id = window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => setEnableTransition(true));
+    });
+    return () => window.cancelAnimationFrame(id);
+  }, [enableTransition]);
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return;
-    }
+  useEffect(() => {
+    if (realCount < 2 || isHovered) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const slideCount = images.length;
     const intervalId = window.setInterval(() => {
-      setActiveIndex((current) => (current + 1) % slideCount);
+      setEnableTransition(true);
+      setPosition((current) => current + 1);
     }, 4500);
 
     return () => {
       window.clearInterval(intervalId);
     };
-  }, [images.length, isHovered]);
+  }, [realCount, isHovered]);
 
   if (!images.length) {
     return null;
   }
 
   const goToSlide = (index: number) => {
-    setActiveIndex(index);
+    setEnableTransition(true);
+    setPosition(index + 1);
   };
 
   const goToPreviousSlide = () => {
-    setActiveIndex((current) => (current - 1 + images.length) % images.length);
+    setEnableTransition(true);
+    setPosition((current) => current - 1);
   };
 
   const goToNextSlide = () => {
-    setActiveIndex((current) => (current + 1) % images.length);
+    setEnableTransition(true);
+    setPosition((current) => current + 1);
   };
+
+  const handleTrackTransitionEnd = () => {
+    if (position === realCount + 1) {
+      setEnableTransition(false);
+      setPosition(1);
+    } else if (position === 0) {
+      setEnableTransition(false);
+      setPosition(realCount);
+    }
+  };
+
+  const renderCard = (image: DevotionalImage, key: string, isActive: boolean, ariaHidden = false) => (
+    <article
+      key={key}
+      className={`sacred-showcase-card${isActive ? ' is-active' : ''}`}
+      aria-hidden={ariaHidden || undefined}
+    >
+      <div className="sacred-showcase-media">
+        <div className="sacred-showcase-image-shell">
+          <Image
+            className="sacred-showcase-image"
+            src={image.src}
+            alt={image.alt}
+            width={1400}
+            height={1000}
+          />
+        </div>
+      </div>
+    </article>
+  );
+
+  const ghostPrev = images[realCount - 1];
+  const ghostNext = images[0];
 
   return (
     <section className="section-spacing sacred-showcase-shell">
@@ -73,10 +125,10 @@ export function DevotionalGallery({ eyebrow, title, images }: DevotionalGalleryP
             <button
               key={`indicator-${image.src}`}
               type="button"
-              className={`sacred-showcase-indicator${index === activeIndex ? ' is-active' : ''}`}
+              className={`sacred-showcase-indicator${index === realIndex ? ' is-active' : ''}`}
               onClick={() => goToSlide(index)}
               aria-label={`Go to slide ${index + 1}`}
-              aria-current={index === activeIndex}
+              aria-current={index === realIndex}
             />
           ))}
         </div>
@@ -84,26 +136,21 @@ export function DevotionalGallery({ eyebrow, title, images }: DevotionalGalleryP
         <div className="sacred-showcase-viewport">
           <div
             className="sacred-showcase-track"
-            style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+            style={{
+              transform: `translateX(-${position * 100}%)`,
+              transition: enableTransition ? undefined : 'none',
+            }}
+            onTransitionEnd={handleTrackTransitionEnd}
           >
-            {images.map((image, index) => (
-              <article
-                key={image.src}
-                className={`sacred-showcase-card${index === activeIndex ? ' is-active' : ''}`}
-              >
-                <div className="sacred-showcase-media">
-                  <div className="sacred-showcase-image-shell">
-                    <Image
-                      className="sacred-showcase-image"
-                      src={image.src}
-                      alt={image.alt}
-                      width={1400}
-                      height={1000}
-                    />
-                  </div>
-                </div>
-              </article>
-            ))}
+            {renderCard(ghostPrev, 'ghost-prev', position === 0, true)}
+            {images.map((image, index) =>
+              renderCard(
+                image,
+                image.src,
+                index === realIndex && position !== 0 && position !== realCount + 1,
+              ),
+            )}
+            {renderCard(ghostNext, 'ghost-next', position === realCount + 1, true)}
           </div>
         </div>
 
@@ -115,7 +162,7 @@ export function DevotionalGallery({ eyebrow, title, images }: DevotionalGalleryP
               onClick={goToPreviousSlide}
               aria-label="Previous slide"
             >
-              <span aria-hidden="true">‹</span>
+              <ChevronLeftIcon />
             </button>
 
             <button
@@ -124,7 +171,7 @@ export function DevotionalGallery({ eyebrow, title, images }: DevotionalGalleryP
               onClick={goToNextSlide}
               aria-label="Next slide"
             >
-              <span aria-hidden="true">›</span>
+              <ChevronRightIcon />
             </button>
           </>
         ) : null}

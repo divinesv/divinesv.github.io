@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { DraggableFloatingImage } from '@/components/draggable-floating-image';
 import { HeroScrollCue } from '@/components/hero-scroll-cue';
+import { ChevronLeftIcon, ChevronRightIcon } from '@/components/icons';
 
 const sceneStorageKey = 'divinesv-home-scene';
 const loadsPerScene = 2;
@@ -115,6 +116,30 @@ const scenes: HomeScene[] = [
         image: '/images/nature.jpg',
         imagePosition: 'center 26%',
       },
+      {
+        title: 'Devi Maa',
+        copy: 'A radiant Shakti note for protection and motherly grace.',
+        image: '/images/Devi3.jpg',
+        imagePosition: 'center 20%',
+      },
+      {
+        title: 'Narasimha Roopam',
+        copy: 'A fierce-yet-graceful image for devotee protection.',
+        image: '/images/NarasimhaSwamy.jpg',
+        imagePosition: 'center 30%',
+      },
+      {
+        title: 'Jagannatha Darshan',
+        copy: 'A welcoming gaze that opens the heart.',
+        image: '/images/Jagannatha.jpg',
+        imagePosition: 'center 32%',
+      },
+      {
+        title: 'Ayyappa Pilgrimage',
+        copy: 'A vrata-led note for discipline and pilgrimage.',
+        image: '/images/Ayyappa.jpg',
+        imagePosition: 'center 28%',
+      },
     ],
   },
   {
@@ -190,6 +215,30 @@ const scenes: HomeScene[] = [
         copy: 'A sustaining Vaishnava counterpoint for balance and refuge.',
         image: '/images/Vishnu.JPG',
         imagePosition: 'center 22%',
+      },
+      {
+        title: 'Shiva Nataraja',
+        copy: 'The cosmic dancer balancing creation and dissolution.',
+        image: '/images/shiva6.jpeg',
+        imagePosition: 'center 30%',
+      },
+      {
+        title: 'Devi Sovereignty',
+        copy: 'A regal Shakti note for inner strength and refuge.',
+        image: '/images/Devi.jpg',
+        imagePosition: 'center 24%',
+      },
+      {
+        title: 'Sacred Cow',
+        copy: 'A pastoral note of nourishment, gentleness, and abundance.',
+        image: '/images/cow.jpg',
+        imagePosition: 'center 40%',
+      },
+      {
+        title: 'Temple Lamps',
+        copy: 'A quiet shrine glow for stillness and prayer.',
+        image: '/images/Temple7.jpg',
+        imagePosition: 'center 40%',
       },
     ],
   },
@@ -267,6 +316,30 @@ const scenes: HomeScene[] = [
         image: '/images/hanuman.jpg',
         imagePosition: 'center 16%',
       },
+      {
+        title: 'Devi Maa',
+        copy: 'A maternal Shakti accent of compassion and protection.',
+        image: '/images/Devi2.jpg',
+        imagePosition: 'center 22%',
+      },
+      {
+        title: 'Shiva Stillness',
+        copy: 'A meditative counterpoint of inwardness and silence.',
+        image: '/images/shiva5.jpg',
+        imagePosition: 'center 40%',
+      },
+      {
+        title: 'Sage Wisdom',
+        copy: 'Adi Shankaracharya — the wisdom lineage of Sanatana Dharma.',
+        image: '/images/AdiShankaracharya.jpg',
+        imagePosition: 'center 28%',
+      },
+      {
+        title: 'Temple Architecture',
+        copy: 'A rich gopuram note for tradition and devotion.',
+        image: '/images/Temples.jpg',
+        imagePosition: 'center 38%',
+      },
     ],
   },
 ];
@@ -293,7 +366,8 @@ function resolveSceneIndex() {
 
 export function HomeVisualExperience() {
   const [sceneIndex, setSceneIndex] = useState(0);
-  const [showcaseIndex, setShowcaseIndex] = useState(0);
+  const [position, setPosition] = useState(1);
+  const [enableTransition, setEnableTransition] = useState(true);
   const [isCarouselHovered, setIsCarouselHovered] = useState(false);
 
   useEffect(() => {
@@ -301,40 +375,67 @@ export function HomeVisualExperience() {
   }, []);
 
   const scene = useMemo(() => scenes[sceneIndex] ?? scenes[0], [sceneIndex]);
+  const realCount = scene.showcaseCards.length;
+
+  const realIndex =
+    position === 0
+      ? realCount - 1
+      : position === realCount + 1
+        ? 0
+        : position - 1;
 
   useEffect(() => {
-    setShowcaseIndex(0);
+    setEnableTransition(false);
+    setPosition(1);
   }, [scene.key]);
 
   useEffect(() => {
-    if (isCarouselHovered) {
+    if (enableTransition) return;
+    const id = window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => setEnableTransition(true));
+    });
+    return () => window.cancelAnimationFrame(id);
+  }, [enableTransition]);
+
+  useEffect(() => {
+    if (isCarouselHovered) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || realCount < 2) {
       return;
     }
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || scene.showcaseCards.length < 2) {
-      return;
-    }
-
-    const slideCount = scene.showcaseCards.length;
     const intervalId = window.setInterval(() => {
-      setShowcaseIndex((current) => (current + 1) % slideCount);
+      setEnableTransition(true);
+      setPosition((current) => current + 1);
     }, 4500);
 
     return () => {
       window.clearInterval(intervalId);
     };
-  }, [scene.key, scene.showcaseCards.length, isCarouselHovered]);
+  }, [scene.key, realCount, isCarouselHovered]);
 
   const goToShowcaseSlide = (index: number) => {
-    setShowcaseIndex(index);
+    setEnableTransition(true);
+    setPosition(index + 1);
   };
 
   const goToPreviousShowcaseSlide = () => {
-    setShowcaseIndex((current) => (current - 1 + scene.showcaseCards.length) % scene.showcaseCards.length);
+    setEnableTransition(true);
+    setPosition((current) => current - 1);
   };
 
   const goToNextShowcaseSlide = () => {
-    setShowcaseIndex((current) => (current + 1) % scene.showcaseCards.length);
+    setEnableTransition(true);
+    setPosition((current) => current + 1);
+  };
+
+  const handleTrackTransitionEnd = () => {
+    if (position === realCount + 1) {
+      setEnableTransition(false);
+      setPosition(1);
+    } else if (position === 0) {
+      setEnableTransition(false);
+      setPosition(realCount);
+    }
   };
 
   return (
@@ -422,10 +523,10 @@ export function HomeVisualExperience() {
               <button
                 key={`${scene.key}-indicator-${card.title}`}
                 type="button"
-                className={`sacred-showcase-indicator${index === showcaseIndex ? ' is-active' : ''}`}
+                className={`sacred-showcase-indicator${index === realIndex ? ' is-active' : ''}`}
                 onClick={() => goToShowcaseSlide(index)}
                 aria-label={`Go to slide ${index + 1}`}
-                aria-current={index === showcaseIndex}
+                aria-current={index === realIndex}
               />
             ))}
           </div>
@@ -433,27 +534,46 @@ export function HomeVisualExperience() {
           <div className="sacred-showcase-viewport">
             <div
               className="sacred-showcase-track"
-              style={{ transform: `translateX(-${showcaseIndex * 100}%)` }}
+              style={{
+                transform: `translateX(-${position * 100}%)`,
+                transition: enableTransition ? undefined : 'none',
+              }}
+              onTransitionEnd={handleTrackTransitionEnd}
             >
-              {scene.showcaseCards.map((card, index) => (
-                <article
-                  key={`${scene.key}-${card.title}`}
-                  className={`sacred-showcase-card${index === showcaseIndex ? ' is-active' : ''} ${card.className ?? ''}`.trim()}
-                >
-                  <div className="sacred-showcase-media">
-                    <div className="sacred-showcase-image-shell">
-                      <Image
-                        className="sacred-showcase-image"
-                        src={card.image}
-                        alt={card.title}
-                        width={1400}
-                        height={1000}
-                        style={{ objectPosition: card.imagePosition ?? 'center' }}
-                      />
+              {(() => {
+                const ghostPrev = scene.showcaseCards[realCount - 1];
+                const ghostNext = scene.showcaseCards[0];
+                const renderCard = (card: ShowcaseCard, key: string, isActive: boolean, ariaHidden = false) => (
+                  <article
+                    key={key}
+                    className={`sacred-showcase-card${isActive ? ' is-active' : ''} ${card.className ?? ''}`.trim()}
+                    aria-hidden={ariaHidden || undefined}
+                  >
+                    <div className="sacred-showcase-media">
+                      <div className="sacred-showcase-image-shell">
+                        <Image
+                          className="sacred-showcase-image"
+                          src={card.image}
+                          alt={card.title}
+                          width={1400}
+                          height={1000}
+                          style={{ objectPosition: card.imagePosition ?? 'center' }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </article>
-              ))}
+                  </article>
+                );
+
+                return (
+                  <>
+                    {renderCard(ghostPrev, `${scene.key}-ghost-prev`, position === 0, true)}
+                    {scene.showcaseCards.map((card, index) =>
+                      renderCard(card, `${scene.key}-${card.title}`, index === realIndex && position !== 0 && position !== realCount + 1)
+                    )}
+                    {renderCard(ghostNext, `${scene.key}-ghost-next`, position === realCount + 1, true)}
+                  </>
+                );
+              })()}
             </div>
           </div>
 
@@ -463,7 +583,7 @@ export function HomeVisualExperience() {
             onClick={goToPreviousShowcaseSlide}
             aria-label="Previous slide"
           >
-            <span aria-hidden="true">‹</span>
+            <ChevronLeftIcon />
           </button>
 
           <button
@@ -472,7 +592,7 @@ export function HomeVisualExperience() {
             onClick={goToNextShowcaseSlide}
             aria-label="Next slide"
           >
-            <span aria-hidden="true">›</span>
+            <ChevronRightIcon />
           </button>
         </div>
       </section>

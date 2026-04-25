@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
+import { EmbedFrame } from '@/components/embed-frame';
 import { devotionalImagePools, pickImage } from '@/lib/devotional-images';
 import { slokaCategories } from '@/lib/slokas';
 import { stotraEntries } from '@/lib/stotras';
@@ -258,13 +259,7 @@ export function MediaHub({ documents, gitaVerseCount, musicEmbeds, tracks, video
                 <h2 className="card-title media-card-title">{embed.title}</h2>
                 <div className="media-video-frame-shell">
                   <div className="media-video-frame">
-                    <iframe
-                      src={embed.embedUrl}
-                      title={embed.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullScreen
-                    />
+                    <EmbedFrame src={embed.embedUrl} title={embed.title} />
                   </div>
                 </div>
               </article>
@@ -281,13 +276,7 @@ export function MediaHub({ documents, gitaVerseCount, musicEmbeds, tracks, video
 
               <div className="media-video-frame-shell">
                 <div className="media-video-frame">
-                  <iframe
-                    src={video.embedUrl}
-                    title={video.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    allowFullScreen
-                  />
+                  <EmbedFrame src={video.embedUrl} title={video.title} />
                 </div>
               </div>
             </article>
