@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function RamaPage() {
-  return <DeityProfilePage profile={deityProfiles.rama} />;
+  return <DeityProfilePage profile={deityProfiles.rama} slug="rama" />;
 }

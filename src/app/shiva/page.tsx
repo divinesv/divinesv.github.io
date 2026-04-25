@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function ShivaPage() {
-  return <DeityProfilePage profile={deityProfiles.shiva} />;
+  return <DeityProfilePage profile={deityProfiles.shiva} slug="shiva" />;
 }

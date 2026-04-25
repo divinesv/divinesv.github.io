@@ -50,7 +50,7 @@ export const navItems: NavItem[] = [
 export const deityCards: FeatureCard[] = [
   {
     title: 'Shiva',
-    subtitle: 'Mahadeva | Maheshvara | శివుడు',
+    subtitle: 'Mahadeva',
     body: 'A meditative entry point for Rudra, Kailasa, Nataraja, jyotirlingas, mantras, and sacred symbolism.',
     href: '/shiva',
     imageSrc: '/images/shiva5.jpg',
@@ -58,7 +58,7 @@ export const deityCards: FeatureCard[] = [
   },
   {
     title: 'Vishnu',
-    subtitle: 'Narayana | Srimannarayana | మహావిష్ణువు',
+    subtitle: 'Narayana',
     body: 'A foundation for Vishnu, avatars, Vaikuntha, protection, dharma, and stories from the epics and Puranas.',
     href: '/vishnu',
     imageSrc: '/images/Vishnu2.jpg',
@@ -66,7 +66,7 @@ export const deityCards: FeatureCard[] = [
   },
   {
     title: 'Devi',
-    subtitle: 'Adi Parashakti | Ammavaru | అమ్మవారు',
+    subtitle: 'Adi Parashakti',
     body: 'A living space for Lakshmi, Saraswati, Durga, Lalita, and the many radiant forms of the Divine Mother.',
     href: '/devi',
     imageSrc: '/images/Devi4.jpg',
@@ -74,7 +74,7 @@ export const deityCards: FeatureCard[] = [
   },
   {
     title: 'Ganesha',
-    subtitle: 'Ganapati | Vinayaka | వినాయకుడు',
+    subtitle: 'Ganapati',
     body: 'A welcoming section for beginnings, wisdom, auspicious rituals, and family devotion.',
     href: '/ganesha',
     imageSrc: '/images/Ganesha4.jpg',
@@ -82,7 +82,7 @@ export const deityCards: FeatureCard[] = [
   },
   {
     title: 'Hanuman',
-    subtitle: 'Anjaneya | Bajrangbali | ఆంజనేయుడు',
+    subtitle: 'Anjaneya',
     body: 'A devotional path for courage, seva, Ramayana study, and daily prayer disciplines.',
     href: '/hanuman',
     imageSrc: '/images/hanuma.jpg',
@@ -90,7 +90,7 @@ export const deityCards: FeatureCard[] = [
   },
   {
     title: 'Krishna',
-    subtitle: 'Govinda | Gopala | శ్రీకృష్ణుడు',
+    subtitle: 'Govinda',
     body: 'A luminous path for leela, Bhagavad Gita wisdom, bhajans, compassion, and intimate devotion.',
     href: '/krishna',
     imageSrc: '/images/Krishna6.jpg',
@@ -98,7 +98,7 @@ export const deityCards: FeatureCard[] = [
   },
   {
     title: 'Rama',
-    subtitle: 'Sri Ramachandra | Maryada Purushottama | శ్రీరాముడు',
+    subtitle: 'Sri Ramachandra',
     body: 'A devotional home for dharma, Ramayana reflection, Sita-Rama bhakti, and calm inner strength.',
     href: '/rama',
     imageSrc: '/images/Rama4.jpg',
@@ -106,7 +106,7 @@ export const deityCards: FeatureCard[] = [
   },
   {
     title: 'Narasimha',
-    subtitle: 'Lakshmi Narasimha | ఉగ్ర నరసింహుడు',
+    subtitle: 'Lakshmi Narasimha',
     body: 'A fierce and compassionate refuge focused on Prahlada bhakti, protection, and fearless surrender.',
     href: '/narasimha',
     imageSrc: '/images/Narasimha3.jpg',
@@ -114,7 +114,7 @@ export const deityCards: FeatureCard[] = [
   },
   {
     title: 'Ayyappa',
-    subtitle: 'Hariharaputra | స్వామియే శరణం అయ్యప్ప',
+    subtitle: 'Hariharaputra',
     body: 'A dedicated space for vrata, pilgrimage, bhajans, sacred discipline, and the centered grace of Ayyappa.',
     href: '/ayyappa',
     imageSrc: '/images/Ayyappa.jpg',
@@ -122,7 +122,7 @@ export const deityCards: FeatureCard[] = [
   },
   {
     title: 'Festivals',
-    subtitle: 'Utsava | Vrata | పండుగలు',
+    subtitle: 'Utsava',
     body: 'A calendar-ready area for Maha Shivaratri, Vaikuntha Ekadashi, Navaratri, Vinayaka Chavithi, and more.',
     href: '/festivals',
     imageSrc: '/images/nature.jpg',

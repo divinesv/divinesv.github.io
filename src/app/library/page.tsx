@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { DraggableFloatingImage } from '@/components/draggable-floating-image';
+import { HeroScrollCue } from '@/components/hero-scroll-cue';
 import { MediaHub } from '@/components/media-hub';
 import { bhagavadGitaStats } from '@/lib/bhagavad-gita';
 import { devotionalImagePools, pickImage } from '@/lib/devotional-images';
@@ -22,8 +23,8 @@ export default async function LibraryPage() {
   return (
     <>
       <section className="section-spacing">
-        <article className="library-feature-card library-feature-card-mobile-overlay library-overview-card">
-          <div className="library-feature-copy">
+        <article className="library-feature-card library-overview-card page-hero-shell page-hero-shell-has-image home-hero-card">
+          <div className="library-feature-copy page-hero-main home-hero-copy">
             <span className="eyebrow">Library and Media</span>
             <h1 className="page-title">Read, listen, and reflect in one sacred space</h1>
             <p className="page-copy">
@@ -45,7 +46,10 @@ export default async function LibraryPage() {
             </div>
           </div>
 
-          <div className="library-feature-media page-hero-aside">
+          <div className="library-feature-media page-hero-aside home-hero-media">
+            <div className="library-feature-visual library-feature-visual-large page-hero-image-frame home-hero-visual">
+              <Image className="library-feature-image page-hero-image home-hero-image" src={overviewImage.src} alt={overviewImage.alt} width={1100} height={900} />
+            </div>
             <DraggableFloatingImage
               className="page-hero-float page-hero-float-top"
               imageClassName="page-hero-float-image"
@@ -62,11 +66,10 @@ export default async function LibraryPage() {
               width={420}
               height={520}
             />
-            <div className="library-feature-visual library-feature-visual-large">
-              <Image className="library-feature-image" src={overviewImage.src} alt={overviewImage.alt} width={1100} height={900} />
-            </div>
           </div>
         </article>
+
+        <HeroScrollCue />
       </section>
 
       <MediaHub

@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function DeviPage() {
-  return <DeityProfilePage profile={deityProfiles.devi} />;
+  return <DeityProfilePage profile={deityProfiles.devi} slug="devi" />;
 }

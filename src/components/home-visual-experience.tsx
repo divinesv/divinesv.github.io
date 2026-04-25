@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 
 import { DraggableFloatingImage } from '@/components/draggable-floating-image';
+import { HeroScrollCue } from '@/components/hero-scroll-cue';
 
 const sceneStorageKey = 'divinesv-home-scene';
 const loadsPerScene = 2;
@@ -14,6 +15,7 @@ type ShowcaseCard = {
   copy: string;
   image: string;
   className?: string;
+  imagePosition?: string;
 };
 
 type HomeScene = {
@@ -23,6 +25,7 @@ type HomeScene = {
     alt: string;
     badge: string;
     copy: string;
+    imagePosition?: string;
   };
   top: {
     image: string;
@@ -45,6 +48,7 @@ const scenes: HomeScene[] = [
       alt: 'A sacred divine image for the DivineSV homepage',
       badge: 'Living Bhakti',
       copy: 'An expansive first impression shaped by darshan, devotion, and sacred visual depth.',
+      imagePosition: 'center 42%',
     },
     top: {
       image: '/images/venkateswara.jpg',
@@ -58,49 +62,69 @@ const scenes: HomeScene[] = [
     showcaseCopy: '',
     showcaseCards: [
       {
-        title: 'Sri Rama and Mata Janki',
-        copy: 'A softer devotional frame for grace, dharma, and sacred companionship.',
-        image: '/images/ramjanki.jpg',
+        title: 'Venkateswara Darshan',
+        copy: 'A temple-rich tone for Vaikuntha, surrender, and refuge.',
+        image: '/images/venkateswara.jpg',
+        imagePosition: 'center 54%',
       },
       {
         title: 'Krishna Bhava',
         copy: 'A vivid visual note for leela, music, and devotion.',
         image: '/images/Krishna8.jpg',
+        imagePosition: 'center 16%',
       },
       {
-        title: 'Venkateswara Darshan',
-        copy: 'A temple-rich tone for Vaikuntha, surrender, and refuge.',
-        image: '/images/venkateswara.jpg',
+        title: 'Sri Rama and Mata Janki',
+        copy: 'A softer devotional frame for grace, dharma, and sacred companionship.',
+        image: '/images/ramjanki.jpg',
+        imagePosition: 'center 18%',
       },
       {
         title: 'Shiva Stillness',
         copy: 'A balancing Shaiva note for silence, inwardness, and mountain contemplation.',
         image: '/images/shiva.jpg',
+        imagePosition: 'center 14%',
       },
       {
         title: 'Rama Patha',
         copy: 'A quieter visual accent for pilgrimage, story, and reverence.',
         image: '/images/Rama3.jpg',
+        imagePosition: 'center 20%',
       },
       {
         title: 'Ganesha Mangalam',
         copy: 'A bright auspicious interval for beginnings, wisdom, and welcome.',
         image: '/images/ganesha.jpg',
+        imagePosition: 'center 22%',
       },
       {
         title: 'Vishnu Horizon',
         copy: 'A sustaining Vaishnava note for preservation, refuge, and order.',
         image: '/images/Vishnu.JPG',
+        imagePosition: 'center 22%',
+      },
+      {
+        title: 'Hanuman Grace',
+        copy: 'A devoted note of strength, service, and humility.',
+        image: '/images/hanuman.jpg',
+        imagePosition: 'center 16%',
+      },
+      {
+        title: 'Sacred Landscape',
+        copy: 'A quieter natural pause inside the devotional mix.',
+        image: '/images/nature.jpg',
+        imagePosition: 'center 26%',
       },
     ],
   },
   {
     key: 'shiva',
     main: {
-      image: '/images/shiva.jpg',
+      image: '/images/shiva5.jpg',
       alt: 'A Shiva-led visual scene for the DivineSV homepage',
       badge: 'Sacred Stillness',
       copy: 'A more contemplative scene built around stillness, mountain silence, and the inward pull of Shiva bhakti.',
+      imagePosition: 'center 48%',
     },
     top: {
       image: '/images/krishna.jpg',
@@ -117,36 +141,55 @@ const scenes: HomeScene[] = [
         title: 'Kailash Presence',
         copy: 'A mountain-led visual anchor for austerity, silence, and cosmic scale.',
         image: '/images/Kailash.jpg',
+        imagePosition: 'center 62%',
       },
       {
         title: 'Hanuman Veera Bhakti',
         copy: 'Strength and humility held in one devotional note.',
         image: '/images/hanuman.jpg',
+        imagePosition: 'center 16%',
       },
       {
         title: 'Krishna Madhurya',
         copy: 'A lyrical balance to the sharper stillness of the scene.',
         image: '/images/Krishna8.jpg',
+        imagePosition: 'center 16%',
       },
       {
         title: 'Rama Seva',
         copy: 'A dharmic companion image for compassion, companionship, and devotion.',
         image: '/images/ramjanki.jpg',
+        imagePosition: 'center 18%',
       },
       {
         title: 'Nature and Pilgrimage',
         copy: 'A calmer landscape texture that prevents the page from feeling over-illustrated.',
         image: '/images/nature.jpg',
+        imagePosition: 'center 26%',
       },
       {
         title: 'Temple Radiance',
         copy: 'A Vaishnava temple counterpoint to keep the scene devotional rather than severe.',
         image: '/images/venkateswara.jpg',
+        imagePosition: 'center 50%',
       },
       {
         title: 'Vishwaroopa Flame',
         copy: 'A final burst of sacred scale so the composition does not become too quiet.',
         image: '/images/vishwaroopam.jpg',
+        imagePosition: 'center 28%',
+      },
+      {
+        title: 'Ganesha Mangalam',
+        copy: 'A bright auspicious interval for beginnings and welcome.',
+        image: '/images/ganesha.jpg',
+        imagePosition: 'center 22%',
+      },
+      {
+        title: 'Vishnu Horizon',
+        copy: 'A sustaining Vaishnava counterpoint for balance and refuge.',
+        image: '/images/Vishnu.JPG',
+        imagePosition: 'center 22%',
       },
     ],
   },
@@ -157,6 +200,7 @@ const scenes: HomeScene[] = [
       alt: 'A Rama and Janki visual scene for the DivineSV homepage',
       badge: 'Dharma and Grace',
       copy: 'A warmer composition centered on Rama bhava, sacred relationship, and devotional storytelling.',
+      imagePosition: 'center 45%',
     },
     top: {
       image: '/images/Vishnu.JPG',
@@ -167,43 +211,61 @@ const scenes: HomeScene[] = [
       alt: 'Ganesha visual for the DivineSV homepage',
     },
     showcaseTitle: 'Designed as a devotional editorial',
-    showcaseCopy:
-      'This version leans into story, grace, and iconographic contrast so the homepage feels more like a crafted publication than a template.',
+    showcaseCopy: '',
     showcaseCards: [
+      {
+        title: 'Kailash Contrast',
+        copy: 'A mountain note that broadens the scene beyond one devotional register.',
+        image: '/images/Kailash.jpg',
+        imagePosition: 'center 62%',
+      },
       {
         title: 'Vishnu Darshan',
         copy: 'A stronger Vaishnava note for refuge, preservation, and cosmic order.',
         image: '/images/Vishnu.JPG',
+        imagePosition: 'center 22%',
       },
       {
         title: 'Ganesha Auspiciousness',
         copy: 'A bright counterpoint for beginnings, wisdom, and welcoming energy.',
         image: '/images/ganesha.jpg',
-      },
-      {
-        title: 'Vishwaroopa',
-        copy: 'A dramatic sacred image to retain scale and wonder.',
-        image: '/images/vishwaroopam.jpg',
+        imagePosition: 'center 22%',
       },
       {
         title: 'Krishna Lila',
         copy: 'A lyrical Krishna accent for music, tenderness, and bhava.',
         image: '/images/Krishna8.jpg',
+        imagePosition: 'center 15%',
       },
       {
         title: 'Rama Patha',
         copy: 'A focused devotional accent for pilgrims, readers, and seekers.',
         image: '/images/Rama3.jpg',
+        imagePosition: 'center 18%',
+      },
+      {
+        title: 'Vishwaroopa',
+        copy: 'A dramatic sacred image to retain scale and wonder.',
+        image: '/images/vishwaroopam.jpg',
+        imagePosition: 'center 28%',
       },
       {
         title: 'Sacred Landscape',
         copy: 'A calmer pause that lets the richer iconography breathe.',
         image: '/images/nature.jpg',
+        imagePosition: 'center 26%',
       },
       {
-        title: 'Kailash Contrast',
-        copy: 'A mountain note that broadens the scene beyond one devotional register.',
-        image: '/images/Kailash.jpg',
+        title: 'Venkateswara Darshan',
+        copy: 'A temple-rich Vaishnava image for refuge and surrender.',
+        image: '/images/venkateswara.jpg',
+        imagePosition: 'center 50%',
+      },
+      {
+        title: 'Hanuman Bhakti',
+        copy: 'A devotional companion of loyalty, courage, and service.',
+        image: '/images/hanuman.jpg',
+        imagePosition: 'center 16%',
       },
     ],
   },
@@ -231,12 +293,49 @@ function resolveSceneIndex() {
 
 export function HomeVisualExperience() {
   const [sceneIndex, setSceneIndex] = useState(0);
+  const [showcaseIndex, setShowcaseIndex] = useState(0);
+  const [isCarouselHovered, setIsCarouselHovered] = useState(false);
 
   useEffect(() => {
     setSceneIndex(resolveSceneIndex());
   }, []);
 
   const scene = useMemo(() => scenes[sceneIndex] ?? scenes[0], [sceneIndex]);
+
+  useEffect(() => {
+    setShowcaseIndex(0);
+  }, [scene.key]);
+
+  useEffect(() => {
+    if (isCarouselHovered) {
+      return;
+    }
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || scene.showcaseCards.length < 2) {
+      return;
+    }
+
+    const slideCount = scene.showcaseCards.length;
+    const intervalId = window.setInterval(() => {
+      setShowcaseIndex((current) => (current + 1) % slideCount);
+    }, 4500);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [scene.key, scene.showcaseCards.length, isCarouselHovered]);
+
+  const goToShowcaseSlide = (index: number) => {
+    setShowcaseIndex(index);
+  };
+
+  const goToPreviousShowcaseSlide = () => {
+    setShowcaseIndex((current) => (current - 1 + scene.showcaseCards.length) % scene.showcaseCards.length);
+  };
+
+  const goToNextShowcaseSlide = () => {
+    setShowcaseIndex((current) => (current + 1) % scene.showcaseCards.length);
+  };
 
   return (
     <>
@@ -246,7 +345,6 @@ export function HomeVisualExperience() {
           key={scene.key}
         >
           <div className="library-feature-copy page-hero-main home-hero-copy">
-            <span className="eyebrow">Om Namo Narayanaya | Om Namah Shivaya</span>
             <h1 className="page-title">A Home for Bhakti and Wisdom</h1>
             <p className="page-copy">
               A prayerful space for darshan, stotras, sacred stories, and quiet reflection. DivineSV gathers
@@ -273,7 +371,12 @@ export function HomeVisualExperience() {
                 width={1400}
                 height={1000}
                 priority
+                style={{ objectPosition: scene.main.imagePosition ?? 'center' }}
               />
+              <div className="home-hero-scene-note">
+                <span className="pill">{scene.main.badge}</span>
+                <p className="body-copy">{scene.main.copy}</p>
+              </div>
             </div>
 
             <DraggableFloatingImage
@@ -293,27 +396,84 @@ export function HomeVisualExperience() {
               width={1200}
               height={900}
             />
+
+            <p className="home-hero-mantra-caption">Om Namo Narayanaya · Om Namah Shivaya</p>
           </div>
         </article>
+
+        <HeroScrollCue />
       </section>
 
-      <section className="section-spacing">
+      <section id="sacred-showcase" className="section-spacing sacred-showcase-shell">
         <div className="showcase-header">
-          <span className="eyebrow">Sacred Visuals</span>
           <h2 className="section-title">{scene.showcaseTitle}</h2>
-          {scene.showcaseCopy ? <p className="page-copy">{scene.showcaseCopy}</p> : null}
         </div>
 
-        <div className="sacred-showcase-grid">
-          {scene.showcaseCards.map((card) => (
-            <article key={`${scene.key}-${card.title}`} className={`sacred-showcase-card ${card.className ?? ''}`.trim()}>
-              <Image className="sacred-showcase-image" src={card.image} alt={card.title} width={1400} height={1000} />
-              <div className="sacred-showcase-overlay">
-                <h3 className="card-title">{card.title}</h3>
-                <p>{card.copy}</p>
-              </div>
-            </article>
-          ))}
+        <div
+          className="sacred-showcase-carousel"
+          aria-roledescription="carousel"
+          onMouseEnter={() => setIsCarouselHovered(true)}
+          onMouseLeave={() => setIsCarouselHovered(false)}
+          onFocus={() => setIsCarouselHovered(true)}
+          onBlur={() => setIsCarouselHovered(false)}
+        >
+          <div className="sacred-showcase-indicators" aria-label="Carousel slide indicators">
+            {scene.showcaseCards.map((card, index) => (
+              <button
+                key={`${scene.key}-indicator-${card.title}`}
+                type="button"
+                className={`sacred-showcase-indicator${index === showcaseIndex ? ' is-active' : ''}`}
+                onClick={() => goToShowcaseSlide(index)}
+                aria-label={`Go to slide ${index + 1}`}
+                aria-current={index === showcaseIndex}
+              />
+            ))}
+          </div>
+
+          <div className="sacred-showcase-viewport">
+            <div
+              className="sacred-showcase-track"
+              style={{ transform: `translateX(-${showcaseIndex * 100}%)` }}
+            >
+              {scene.showcaseCards.map((card, index) => (
+                <article
+                  key={`${scene.key}-${card.title}`}
+                  className={`sacred-showcase-card${index === showcaseIndex ? ' is-active' : ''} ${card.className ?? ''}`.trim()}
+                >
+                  <div className="sacred-showcase-media">
+                    <div className="sacred-showcase-image-shell">
+                      <Image
+                        className="sacred-showcase-image"
+                        src={card.image}
+                        alt={card.title}
+                        width={1400}
+                        height={1000}
+                        style={{ objectPosition: card.imagePosition ?? 'center' }}
+                      />
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            className="sacred-showcase-control sacred-showcase-control-prev"
+            onClick={goToPreviousShowcaseSlide}
+            aria-label="Previous slide"
+          >
+            <span aria-hidden="true">‹</span>
+          </button>
+
+          <button
+            type="button"
+            className="sacred-showcase-control sacred-showcase-control-next"
+            onClick={goToNextShowcaseSlide}
+            aria-label="Next slide"
+          >
+            <span aria-hidden="true">›</span>
+          </button>
         </div>
       </section>
     </>

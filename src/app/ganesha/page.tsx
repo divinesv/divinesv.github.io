@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function GaneshaPage() {
-  return <DeityProfilePage profile={deityProfiles.ganesha} />;
+  return <DeityProfilePage profile={deityProfiles.ganesha} slug="ganesha" />;
 }

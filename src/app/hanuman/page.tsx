@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function HanumanPage() {
-  return <DeityProfilePage profile={deityProfiles.hanuman} />;
+  return <DeityProfilePage profile={deityProfiles.hanuman} slug="hanuman" />;
 }

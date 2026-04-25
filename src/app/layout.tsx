@@ -1,10 +1,18 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { Cormorant_Garamond } from 'next/font/google';
 
 import { PageShell } from '@/components/page-shell';
 import { SiteAtmosphere } from '@/components/site-atmosphere';
 
 import './globals.css';
+
+const serif = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['500', '600', '700'],
+  variable: '--font-serif',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: {
@@ -21,7 +29,7 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={serif.variable} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{

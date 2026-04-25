@@ -1,6 +1,9 @@
+import Link from 'next/link';
+
 import { DevotionalGallery } from '@/components/devotional-gallery';
 import { PageHero } from '@/components/page-hero';
 import type { DevotionalImage } from '@/lib/devotional-images';
+import { getNextDeityLink, type DeitySlug } from '@/lib/deity-profiles';
 
 export type DeityProfile = {
   eyebrow: string;
@@ -23,9 +26,12 @@ export type DeityProfile = {
 
 type DeityProfilePageProps = {
   profile: DeityProfile;
+  slug: DeitySlug;
 };
 
-export function DeityProfilePage({ profile }: DeityProfilePageProps) {
+export function DeityProfilePage({ profile, slug }: DeityProfilePageProps) {
+  const nextDeity = getNextDeityLink(slug);
+
   return (
     <>
       <PageHero
@@ -42,8 +48,8 @@ export function DeityProfilePage({ profile }: DeityProfilePageProps) {
         accentBottomImageAlt={profile.accentBottomImage?.alt}
       />
 
-      <section className="dual-grid section-spacing">
-        <article className="devotional-panel">
+      <section className="section-spacing">
+        <article className="devotional-panel devotional-panel-solo">
           <span className="eyebrow">{profile.sectionEyebrow}</span>
           <h2 className="section-title">{profile.sectionTitle}</h2>
           {profile.paragraphs.map((paragraph) => (
@@ -52,18 +58,35 @@ export function DeityProfilePage({ profile }: DeityProfilePageProps) {
             </p>
           ))}
         </article>
+      </section>
 
-        <aside className="quote-strip">
-          <span className="pill">{profile.practiceTitle}</span>
-          <ul className="list-clean">
-            {profile.practiceItems.map((item) => (
-              <li key={item}>{item}</li>
+      <section className="section-spacing devotional-pullquote-section">
+        <figure className="devotional-pullquote">
+          <span className="eyebrow devotional-pullquote-eyebrow">{profile.practiceTitle}</span>
+          <blockquote className="devotional-pullquote-body">
+            {profile.practiceItems.map((item, index) => (
+              <span key={item} className="devotional-pullquote-line">
+                {item}
+                {index < profile.practiceItems.length - 1 ? (
+                  <span className="devotional-pullquote-divider" aria-hidden="true">
+                    ·
+                  </span>
+                ) : null}
+              </span>
             ))}
-          </ul>
-        </aside>
+          </blockquote>
+        </figure>
       </section>
 
       <DevotionalGallery eyebrow={profile.galleryEyebrow} title={profile.galleryTitle} images={profile.galleryImages} />
+
+      <section className="section-spacing deity-next-section">
+        <Link className="deity-next-link" href={nextDeity.href}>
+          <span className="deity-next-eyebrow">Continue the pantheon</span>
+          <span className="deity-next-title">{nextDeity.eyebrow}</span>
+          <span className="deity-next-arrow" aria-hidden="true">→</span>
+        </Link>
+      </section>
     </>
   );
 }

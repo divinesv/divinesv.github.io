@@ -17,7 +17,7 @@ function collectGalleryImages(...imageGroups: ReadonlyArray<readonly DevotionalI
 
 export const deityProfiles = {
   shiva: {
-    eyebrow: 'Shiva | Mahadeva | శివుడు',
+    eyebrow: 'Shiva',
     title: 'The stillness, grace, and fire of Mahadeva',
     description:
       'Shiva is revered as the silent summit of consciousness: lord of Kailasa, bearer of Ganga, dancer of cosmic dissolution, and the compassionate one who burns ignorance so the heart may awaken.',
@@ -47,7 +47,7 @@ export const deityProfiles = {
     galleryImages: collectGalleryImages(rotateImages(devotionalImagePools.shiva, 0)),
   },
   vishnu: {
-    eyebrow: 'Vishnu | Narayana | మహావిష్ణువు',
+    eyebrow: 'Vishnu',
     title: 'Protector, preserver, and refuge of the worlds',
     description:
       'Vishnu stands as the sustaining presence of dharma: the compassionate preserver who descends as avatar whenever balance is threatened and who offers refuge to the devotee through grace, order, and remembrance.',
@@ -77,7 +77,7 @@ export const deityProfiles = {
     galleryImages: collectGalleryImages(rotateImages(devotionalImagePools.vishnu, 1)),
   },
   devi: {
-    eyebrow: 'Devi | Adi Parashakti | అమ్మవారు',
+    eyebrow: 'Devi',
     title: 'The radiance, protection, and motherhood of Shakti',
     description:
       'Devi is the living fullness of divine power: mother, queen, protectress, wisdom, abundance, beauty, and fierce compassion. In every form of the Goddess, the universe is held, nourished, and transformed.',
@@ -107,7 +107,7 @@ export const deityProfiles = {
     galleryImages: collectGalleryImages(rotateImages(devotionalImagePools.devi, 0)),
   },
   ganesha: {
-    eyebrow: 'Ganesha | Ganapati | వినాయకుడు',
+    eyebrow: 'Ganesha',
     title: 'Auspicious beginnings and clear, benevolent wisdom',
     description:
       'Ganesha is invoked at the threshold of all worthy beginnings. He clears obstacles, steadies intention, protects the path of learning, and blesses the devotee with discrimination, joy, and auspicious momentum.',
@@ -137,7 +137,7 @@ export const deityProfiles = {
     galleryImages: collectGalleryImages(devotionalImagePools.ganesha),
   },
   hanuman: {
-    eyebrow: 'Hanuman | Anjaneya | ఆంజనేయుడు',
+    eyebrow: 'Hanuman',
     title: 'Strength, humility, and unwavering seva',
     description:
       'Hanuman is the radiant union of strength and surrender. He is the fearless servant of Rama, the protector of devotees, the embodiment of disciplined bhakti, and the reminder that true power flowers only when offered in service.',
@@ -167,7 +167,7 @@ export const deityProfiles = {
     galleryImages: collectGalleryImages(devotionalImagePools.hanuman, devotionalImagePools.rama),
   },
   krishna: {
-    eyebrow: 'Krishna | Govinda | శ్రీకృష్ణుడు',
+    eyebrow: 'Krishna',
     title: 'The sweetness, wisdom, and divine play of Krishna',
     description:
       'Krishna draws the heart through beauty, intimacy, and revelation. He is the flute-bearing beloved of Vrindavan, the guide of Arjuna in the Gita, and the lord whose leela turns devotion into joy-filled remembrance.',
@@ -197,7 +197,7 @@ export const deityProfiles = {
     galleryImages: collectGalleryImages(devotionalImagePools.krishna, devotionalImagePools.gita),
   },
   rama: {
-    eyebrow: 'Rama | Sri Ramachandra | శ్రీరాముడు',
+    eyebrow: 'Rama',
     title: 'Dharma, compassion, and the serene strength of Rama',
     description:
       'Rama is revered as Maryada Purushottama, the ideal sovereign whose life reveals discipline, tenderness, truthfulness, and unwavering commitment to dharma. In his name, devotion becomes steadier, clearer, and nobler.',
@@ -227,7 +227,7 @@ export const deityProfiles = {
     galleryImages: collectGalleryImages(devotionalImagePools.rama, devotionalImagePools.hanuman),
   },
   narasimha: {
-    eyebrow: 'Narasimha | Lakshmi Narasimha | నరసింహుడు',
+    eyebrow: 'Narasimha',
     title: 'Fierce protection and immediate refuge for the devoted',
     description:
       'Narasimha manifests as the blazing assurance that devotion will not be abandoned. In him, ferocity is not cruelty but protection, and divine power rises instantly when innocence, faith, and surrender call out for refuge.',
@@ -257,7 +257,7 @@ export const deityProfiles = {
     galleryImages: collectGalleryImages(devotionalImagePools.narasimha, devotionalImagePools.vishnu),
   },
   ayyappa: {
-    eyebrow: 'Ayyappa | Hariharaputra | అయ్యప్ప',
+    eyebrow: 'Ayyappa',
     title: 'Discipline, pilgrimage, and the centered grace of Ayyappa',
     description:
       'Ayyappa is revered as Hariharaputra, the radiant lord of discipline, inward strength, and pilgrimage. His worship gathers vrata, humility, fraternity, and the ascent of devotion through sacred effort.',
@@ -287,3 +287,28 @@ export const deityProfiles = {
     galleryImages: collectGalleryImages(devotionalImagePools.ayyappa, devotionalImagePools.temples),
   },
 } as const satisfies Record<string, DeityProfile>;
+
+export const deityOrder = [
+  'ganesha',
+  'shiva',
+  'devi',
+  'vishnu',
+  'krishna',
+  'rama',
+  'hanuman',
+  'narasimha',
+  'ayyappa',
+] as const;
+
+export type DeitySlug = (typeof deityOrder)[number];
+
+export function getNextDeityLink(slug: DeitySlug): { href: string; eyebrow: string; title: string } {
+  const index = deityOrder.indexOf(slug);
+  const nextSlug = deityOrder[(index + 1) % deityOrder.length];
+  const nextProfile = deityProfiles[nextSlug];
+  return {
+    href: `/${nextSlug}`,
+    eyebrow: nextProfile.eyebrow,
+    title: nextProfile.title,
+  };
+}

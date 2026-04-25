@@ -23,7 +23,24 @@ export default async function HomePage() {
     <>
       <HomeVisualExperience />
 
-      <section className="dual-grid section-spacing floating-section-shell">
+      <section className="section-spacing">
+        <span className="eyebrow">Sacred Sections</span>
+        <h2 className="section-title">Deity Pathways</h2>
+
+        <div className="content-grid">
+          {deityCards.map((deity) => (
+            <Link key={deity.href} className="surface-card deity-path-card" href={deity.href}>
+              <div className="deity-path-card-visual">
+                <Image className="deity-path-card-image" src={deity.imageSrc} alt={deity.imageAlt} width={1200} height={900} />
+              </div>
+              <h3 className="card-title deity-path-card-title">{deity.title}</h3>
+              <p>{deity.body}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="dual-grid section-spacing floating-section-shell home-library-feature-shell">
         <DraggableFloatingImage
           className="section-float-image-card section-float-image-card-top"
           imageClassName="section-float-image"
@@ -55,34 +72,6 @@ export default async function HomePage() {
               </Link>
             ) : null}
           </div>
-        </div>
-
-        <aside className="quote-strip">
-          <span className="pill">Reader Access</span>
-          <ul className="list-clean">
-            <li>{library.length} PDF documents ready for readers</li>
-            <li>Each PDF gets a dedicated reader page on the site</li>
-          </ul>
-        </aside>
-      </section>
-
-      <section className="section-spacing">
-        <span className="eyebrow">Sacred Sections</span>
-        <h2 className="section-title">Deity Pathways</h2>
-
-        <div className="content-grid">
-          {deityCards.map((deity) => (
-            <Link key={deity.href} className="surface-card deity-path-card" href={deity.href}>
-              <div className="deity-path-card-visual">
-                <Image className="deity-path-card-image" src={deity.imageSrc} alt={deity.imageAlt} width={1200} height={900} />
-                <div className="deity-path-card-overlay">
-                  <h3 className="card-title deity-path-card-title">{deity.title}</h3>
-                </div>
-              </div>
-              <p className="card-subtitle">{deity.subtitle}</p>
-              <p>{deity.body}</p>
-            </Link>
-          ))}
         </div>
       </section>
     </>

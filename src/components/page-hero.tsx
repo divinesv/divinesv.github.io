@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { DraggableFloatingImage } from '@/components/draggable-floating-image';
+import { HeroScrollCue } from '@/components/hero-scroll-cue';
 import Image from 'next/image';
 
 export type PageHeroAsideItem = {
@@ -48,20 +49,26 @@ export function PageHero({
   const topFloatAlt = accentTopImageAlt ?? imageAlt ?? title;
   const bottomFloatSrc = accentBottomImageSrc ?? imageSrc;
   const bottomFloatAlt = accentBottomImageAlt ?? imageAlt ?? title;
+  const primaryEyebrow = eyebrow.split('|')[0]?.trim() ?? eyebrow;
 
   return (
     <section className="section-spacing">
       <article
-        className={`library-feature-card library-feature-card-mobile-overlay library-overview-card page-hero-shell${hasImage ? ' page-hero-shell-has-image' : ''}${className ? ` ${className}` : ''}`}
+        className={`library-feature-card library-overview-card page-hero-shell home-hero-card${hasImage ? ' page-hero-shell-has-image' : ''}${className ? ` ${className}` : ''}`}
       >
-        <div className="library-feature-copy page-hero-main">
-          <span className="eyebrow">{eyebrow}</span>
+        <div className="library-feature-copy page-hero-main home-hero-copy">
+          <span className="eyebrow">{primaryEyebrow}</span>
           <h1 className="page-title">{title}</h1>
           <p className="page-copy">{description}</p>
           {children}
         </div>
 
-        <div className={`library-feature-media page-hero-aside${asideClassName ? ` ${asideClassName}` : ''}`}>
+        <div className={`library-feature-media page-hero-aside home-hero-media${asideClassName ? ` ${asideClassName}` : ''}`}>
+          {imageSrc ? (
+            <div className="library-feature-visual library-feature-visual-large page-hero-image-frame home-hero-visual">
+              <Image className="library-feature-image page-hero-image home-hero-image" src={imageSrc} alt={imageAlt ?? title} width={1200} height={800} />
+            </div>
+          ) : null}
           {topFloatSrc ? (
             <DraggableFloatingImage
               className="page-hero-float page-hero-float-top"
@@ -82,13 +89,10 @@ export function PageHero({
               height={520}
             />
           ) : null}
-          {imageSrc ? (
-            <div className="library-feature-visual library-feature-visual-large page-hero-image-frame">
-              <Image className="library-feature-image page-hero-image" src={imageSrc} alt={imageAlt ?? title} width={1200} height={800} />
-            </div>
-          ) : null}
         </div>
       </article>
+
+      <HeroScrollCue />
     </section>
   );
 }

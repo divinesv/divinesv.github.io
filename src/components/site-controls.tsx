@@ -4,11 +4,41 @@ import { useEffect, useRef, useState } from 'react';
 
 const storageKey = 'divinesv-theme';
 const chantStorageKey = 'divinesv-om-chant-enabled';
+const chantVolumeStorageKey = 'divinesv-om-chant-volume';
 const languageStorageKey = 'divinesv-language';
 const omChantVideoId = 'SBiwLibZqfw';
+const defaultChantVolume = 25;
+const minChantVolume = 0;
+const maxChantVolume = 100;
 
 type ThemeMode = 'light' | 'dark';
 type SiteLanguage = 'en' | 'hi' | 'te';
+
+type YouTubePlayer = {
+  destroy: () => void;
+  pauseVideo: () => void;
+  playVideo: () => void;
+  setVolume: (volume: number) => void;
+};
+
+type YouTubePlayerEvent = {
+  target: YouTubePlayer;
+};
+
+type YouTubeNamespace = {
+  Player: new (
+    element: HTMLElement,
+    options: {
+      videoId: string;
+      playerVars?: Record<string, number | string>;
+      events?: {
+        onReady?: (event: YouTubePlayerEvent) => void;
+      };
+    },
+  ) => YouTubePlayer;
+};
+
+let youtubeApiPromise: Promise<YouTubeNamespace> | null = null;
 
 declare global {
   interface Window {
@@ -25,7 +55,53 @@ declare global {
       };
     };
     divinesvTranslateInit?: () => void;
+    onYouTubeIframeAPIReady?: () => void;
+    YT?: YouTubeNamespace;
   }
+}
+
+function clampChantVolume(value: number) {
+  return Math.min(maxChantVolume, Math.max(minChantVolume, Math.round(value)));
+}
+
+function loadYouTubeApi() {
+  if (typeof window === 'undefined') {
+    return Promise.reject(new Error('YouTube API can only load in the browser.'));
+  }
+
+  if (window.YT?.Player) {
+    return Promise.resolve(window.YT);
+  }
+
+  if (youtubeApiPromise) {
+    return youtubeApiPromise;
+  }
+
+  youtubeApiPromise = new Promise<YouTubeNamespace>((resolve, reject) => {
+    const existingReadyHandler = window.onYouTubeIframeAPIReady;
+
+    window.onYouTubeIframeAPIReady = () => {
+      existingReadyHandler?.();
+
+      if (window.YT?.Player) {
+        resolve(window.YT);
+      }
+    };
+
+    const existingScript = document.querySelector<HTMLScriptElement>('script[data-divinesv-youtube="true"]');
+    if (existingScript) {
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://www.youtube.com/iframe_api';
+    script.async = true;
+    script.dataset.divinesvYoutube = 'true';
+    script.addEventListener('error', () => reject(new Error('Failed to load the YouTube iframe API.')));
+    document.head.appendChild(script);
+  });
+
+  return youtubeApiPromise;
 }
 
 function setGoogleTranslateCookie(language: SiteLanguage) {
@@ -51,19 +127,37 @@ function applyTheme(theme: ThemeMode) {
   document.documentElement.dataset.theme = theme;
 }
 
+function suppressTranslateBanner() {
+  document.body.style.top = '0px';
+
+  const translateFrames = document.querySelectorAll<HTMLElement>(
+    'iframe.goog-te-banner-frame, iframe.skiptranslate, .goog-te-banner-frame.skiptranslate, body > .skiptranslate',
+  );
+
+  translateFrames.forEach((element) => {
+    element.style.setProperty('display', 'none', 'important');
+    element.style.setProperty('visibility', 'hidden', 'important');
+  });
+}
+
 export function SiteControls() {
   const [theme, setTheme] = useState<ThemeMode>('light');
   const [chantEnabled, setChantEnabled] = useState(false);
+  const [chantVolume, setChantVolume] = useState(defaultChantVolume);
   const [language, setLanguage] = useState<SiteLanguage>('en');
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
+  const [chantPlayerReady, setChantPlayerReady] = useState(false);
   const [translateReady, setTranslateReady] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const chantPlayerRef = useRef<YouTubePlayer | null>(null);
+  const chantPlayerHostRef = useRef<HTMLDivElement | null>(null);
   const scrollAnimationRef = useRef<number | null>(null);
   const languageMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const storedTheme = window.localStorage.getItem(storageKey);
     const storedChantEnabled = window.localStorage.getItem(chantStorageKey) === 'true';
+    const storedChantVolume = Number.parseInt(window.localStorage.getItem(chantVolumeStorageKey) ?? '', 10);
     const storedLanguage = window.localStorage.getItem(languageStorageKey);
     const resolvedTheme =
       storedTheme === 'light' || storedTheme === 'dark'
@@ -71,14 +165,18 @@ export function SiteControls() {
         : window.matchMedia('(prefers-color-scheme: dark)').matches
           ? 'dark'
           : 'light';
+    const resolvedChantVolume = Number.isFinite(storedChantVolume) ? clampChantVolume(storedChantVolume) : defaultChantVolume;
     const resolvedLanguage: SiteLanguage =
       storedLanguage === 'hi' || storedLanguage === 'te' || storedLanguage === 'en' ? storedLanguage : 'en';
 
     setTheme(resolvedTheme);
     setChantEnabled(storedChantEnabled);
+    setChantVolume(resolvedChantVolume);
     setLanguage(resolvedLanguage);
     applyTheme(resolvedTheme);
     setGoogleTranslateCookie(resolvedLanguage);
+    suppressTranslateBanner();
+    window.localStorage.setItem(chantVolumeStorageKey, String(resolvedChantVolume));
 
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 320);
@@ -93,6 +191,90 @@ export function SiteControls() {
       if (scrollAnimationRef.current) {
         window.cancelAnimationFrame(scrollAnimationRef.current);
       }
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const initializeChantPlayer = async () => {
+      try {
+        const YT = await loadYouTubeApi();
+
+        if (cancelled || !chantPlayerHostRef.current || chantPlayerRef.current) {
+          return;
+        }
+
+        chantPlayerRef.current = new YT.Player(chantPlayerHostRef.current, {
+          videoId: omChantVideoId,
+          playerVars: {
+            autoplay: 0,
+            controls: 0,
+            disablekb: 1,
+            fs: 0,
+            loop: 1,
+            modestbranding: 1,
+            playlist: omChantVideoId,
+            playsinline: 1,
+            rel: 0,
+          },
+          events: {
+            onReady: (event) => {
+              event.target.setVolume(chantVolume);
+              setChantPlayerReady(true);
+            },
+          },
+        });
+      } catch {
+        setChantPlayerReady(false);
+      }
+    };
+
+    initializeChantPlayer();
+
+    return () => {
+      cancelled = true;
+
+      if (chantPlayerRef.current) {
+        chantPlayerRef.current.destroy();
+        chantPlayerRef.current = null;
+      }
+
+      setChantPlayerReady(false);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!chantPlayerReady || !chantPlayerRef.current) {
+      return;
+    }
+
+    chantPlayerRef.current.setVolume(chantVolume);
+
+    if (chantEnabled) {
+      chantPlayerRef.current.playVideo();
+      return;
+    }
+
+    chantPlayerRef.current.pauseVideo();
+  }, [chantEnabled, chantPlayerReady, chantVolume]);
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      suppressTranslateBanner();
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+      attributeFilter: ['class', 'style'],
+    });
+
+    suppressTranslateBanner();
+
+    return () => {
+      observer.disconnect();
     };
   }, []);
 
@@ -118,6 +300,7 @@ export function SiteControls() {
       );
 
       setTranslateReady(true);
+      suppressTranslateBanner();
     };
 
     if (window.google?.translate?.TranslateElement) {
@@ -180,6 +363,9 @@ export function SiteControls() {
     window.localStorage.setItem(languageStorageKey, nextLanguage);
     setLanguageMenuOpen(false);
     applyPageLanguage(nextLanguage);
+    window.setTimeout(suppressTranslateBanner, 0);
+    window.setTimeout(suppressTranslateBanner, 250);
+    window.setTimeout(suppressTranslateBanner, 1000);
   }
 
   function scrollToTopSlowly() {
@@ -217,19 +403,16 @@ export function SiteControls() {
     scrollAnimationRef.current = window.requestAnimationFrame(step);
   }
 
+  const chantIcon =
+    !chantEnabled || chantVolume === 0 ? 'fa-volume-xmark' : chantVolume < 50 ? 'fa-volume-low' : 'fa-volume-high';
+
   return (
     <div className="site-controls" aria-label="Site controls">
       <div id="google_translate_element" className="site-translate-anchor" aria-hidden="true" />
 
-      {chantEnabled ? (
-        <div className="ambient-chant-frame" aria-hidden="true">
-          <iframe
-            src={`https://www.youtube.com/embed/${omChantVideoId}?autoplay=1&loop=1&playlist=${omChantVideoId}`}
-            title="Om chanting audio"
-            allow="autoplay; encrypted-media"
-          />
-        </div>
-      ) : null}
+      <div className="ambient-chant-frame" aria-hidden="true">
+        <div ref={chantPlayerHostRef} className="ambient-chant-player" />
+      </div>
 
       <div className="language-control-shell" ref={languageMenuRef}>
         <button
@@ -271,16 +454,18 @@ export function SiteControls() {
         </div>
       </div>
 
-      <button
-        aria-label={chantEnabled ? 'Mute Om chanting' : 'Play Om chanting'}
-        title={chantEnabled ? 'Mute Om chanting' : 'Play Om chanting'}
-        className="floating-control floating-control-left floating-control-left-secondary"
-        type="button"
-        onClick={toggleChant}
-      >
-        <i className={`fa-solid ${chantEnabled ? 'fa-volume-high' : 'fa-volume-xmark'} control-icon`} aria-hidden="true" />
-        <span className="sr-only">{chantEnabled ? 'Mute Om chanting' : 'Play Om chanting'}</span>
-      </button>
+      <div className="chant-control-shell">
+        <button
+          aria-label={chantEnabled ? 'Mute Om chanting' : 'Play Om chanting'}
+          title={chantEnabled ? `Mute Om chanting (${chantVolume}% volume)` : 'Play Om chanting'}
+          className="floating-control floating-control-left floating-control-left-secondary"
+          type="button"
+          onClick={toggleChant}
+        >
+          <i className={`fa-solid ${chantIcon} control-icon`} aria-hidden="true" />
+          <span className="sr-only">{chantEnabled ? 'Mute Om chanting' : 'Play Om chanting'}</span>
+        </button>
+      </div>
 
       <button
         aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
