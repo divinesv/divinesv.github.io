@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { Cormorant_Garamond } from 'next/font/google';
+import { Cormorant_Garamond, Noto_Serif_Devanagari, Noto_Serif_Telugu } from 'next/font/google';
 
 import { PageShell } from '@/components/page-shell';
 import { SiteAtmosphere } from '@/components/site-atmosphere';
@@ -11,6 +11,20 @@ const serif = Cormorant_Garamond({
   subsets: ['latin'],
   weight: ['500', '600', '700'],
   variable: '--font-serif',
+  display: 'swap',
+});
+
+const devanagari = Noto_Serif_Devanagari({
+  subsets: ['devanagari', 'latin'],
+  weight: ['500', '600', '700'],
+  variable: '--font-devanagari',
+  display: 'swap',
+});
+
+const telugu = Noto_Serif_Telugu({
+  subsets: ['telugu', 'latin'],
+  weight: ['500', '600', '700'],
+  variable: '--font-telugu',
   display: 'swap',
 });
 
@@ -29,7 +43,7 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" className={serif.variable} suppressHydrationWarning>
+    <html lang="en" className={`${serif.variable} ${devanagari.variable} ${telugu.variable}`} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
