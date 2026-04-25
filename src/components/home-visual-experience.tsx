@@ -474,10 +474,6 @@ export function HomeVisualExperience() {
                 priority
                 style={{ objectPosition: scene.main.imagePosition ?? 'center' }}
               />
-              <div className="home-hero-scene-note">
-                <span className="pill">{scene.main.badge}</span>
-                <p className="body-copy">{scene.main.copy}</p>
-              </div>
             </div>
 
             <DraggableFloatingImage
