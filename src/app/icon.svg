@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="DivineSV favicon">
+  <defs>
+    <linearGradient id="divinesvMark" x1="10" y1="10" x2="54" y2="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d6ba86" />
+      <stop offset="1" stop-color="#c98e7d" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="32" fill="url(#divinesvMark)" />
+  <text
+    x="32"
+    y="39"
+    text-anchor="middle"
+    font-size="30"
+    font-family="'Noto Serif Devanagari', 'Noto Serif', serif"
+    font-weight="700"
+    fill="#fff9f1"
+  >
+    ॐ
+  </text>
+</svg>
