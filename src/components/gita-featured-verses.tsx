@@ -48,6 +48,24 @@ const variants = [
   },
 ];
 
+function excerptOriginalVerse(text: string) {
+  return text
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .slice(0, 2)
+    .join('\n');
+}
+
+function excerptText(text: string, maxLength: number) {
+  const normalized = text.replace(/\s+/g, ' ').trim();
+  if (normalized.length <= maxLength) {
+    return normalized;
+  }
+
+  return `${normalized.slice(0, maxLength).trimEnd()}...`;
+}
+
 function resolveVariantIndex() {
   const today = new Date();
   const daySeed = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
@@ -81,9 +99,13 @@ export function GitaFeaturedVerses({ verses }: GitaFeaturedVersesProps) {
             style={{ '--gita-feature-image': `url(${variant.imageOrder[index % variant.imageOrder.length]})` } as CSSProperties}
           >
             <div className="gita-feature-content">
-              <span className="card-tag">{verse.reference}</span>
-              <p className="gita-feature-translation">{verse.translation}</p>
-              <p className="gita-feature-commentary">{verse.commentary.slice(0, 210)}...</p>
+              <div className="gita-feature-head">
+                <span className="card-tag">Anchor Verse</span>
+                <span className="gita-feature-reference">{verse.reference}</span>
+              </div>
+              <p className="gita-feature-original">{excerptOriginalVerse(verse.originalVerse)}</p>
+              <p className="gita-feature-translation">{excerptText(verse.translation, 170)}</p>
+              <p className="gita-feature-commentary">{excerptText(verse.commentary, 135)}</p>
             </div>
           </article>
         ))}

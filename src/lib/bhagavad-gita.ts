@@ -56,10 +56,14 @@ function normalizeTranslation(text: string) {
   return normalizeText(text).replace(/^BG\s+\d+(?:\.\d+)?(?:-\d+)?:\s*/i, '');
 }
 
+function stripVerseNumberMarker(text: string) {
+  return normalizeText(text).replace(/\s*\|\|\s*\d+\s*\|\|\s*$/g, '').trim();
+}
+
 function formatOriginalVerse(text: string) {
-  return normalizeText(text)
-    .replace(/\|\|/g, ' ||\n')
-    .replace(/\|/g, ' |\n')
+  return stripVerseNumberMarker(text)
+    .replace(/\s*\|\|\s*/g, '\n')
+    .replace(/\s*\|\s*/g, '\n')
     .replace(/\n{2,}/g, '\n')
     .trim();
 }

@@ -763,6 +763,7 @@ html[data-theme='dark'] .footer-column {
 html[data-theme='dark'] .gita-scene-overlay,
 html[data-theme='dark'] .gita-result-badge,
 html[data-theme='dark'] .gita-verse-card,
+html[data-theme='dark'] .gita-feature-original,
 html[data-theme='dark'] .gita-feature-translation,
 html[data-theme='dark'] .gita-feature-commentary {
   background: rgba(19, 22, 28, 0.8);
@@ -802,6 +803,18 @@ html[data-theme='dark'] .gita-feature-commentary,
 html[data-theme='dark'] .gita-scene-overlay p,
 html[data-theme='dark'] .gita-result-badge p {
   color: rgba(237, 244, 242, 0.8);
+}
+
+html[data-theme='dark'] .gita-feature-content {
+  background: linear-gradient(180deg, rgba(6, 10, 15, 0.12) 0%, rgba(6, 10, 15, 0.32) 32%, rgba(16, 20, 26, 0.92) 100%);
+}
+
+html[data-theme='dark'] .gita-feature-reference {
+  color: rgba(237, 244, 242, 0.88);
+}
+
+html[data-theme='dark'] .gita-feature-original {
+  color: rgba(248, 242, 227, 0.96);
 }
 
 html[data-theme='dark'] .stotra-language-block,
@@ -3949,7 +3962,7 @@ html[data-theme='dark'] .sloka-meaning-item {
   border: 1px solid rgba(255, 255, 255, 0.24);
   background: rgba(252, 248, 242, 0.84);
   backdrop-filter: blur(18px);
-  max-height: 24rem;
+  max-height: 20.5rem;
   overflow: auto;
 }
 
@@ -4004,14 +4017,14 @@ html[data-theme='dark'] .sloka-meaning-item {
   overflow: hidden;
   width: 100%;
   max-width: var(--image-max-size);
-  min-height: 14rem;
+  min-height: 15.5rem;
   border-radius: 28px;
   border: 1px solid rgba(47, 111, 115, 0.12);
   background-image: var(--gita-feature-image);
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
-  background-position: center top;
-  background-color: rgba(255, 255, 255, 0.72);
+  background-position: center;
+  background-color: rgba(255, 255, 255, 0.76);
   box-shadow: var(--shadow-soft);
 }
 
@@ -4020,34 +4033,58 @@ html[data-theme='dark'] .sloka-meaning-item {
   z-index: 2;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  gap: 0.75rem;
   min-height: 100%;
   padding: 1rem;
+  background: linear-gradient(180deg, rgba(15, 28, 31, 0.08) 0%, rgba(15, 28, 31, 0.18) 32%, rgba(252, 248, 242, 0.9) 100%);
+}
+
+.gita-feature-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  flex-wrap: wrap;
 }
 
 .gita-feature-content .card-tag {
   align-self: flex-start;
 }
 
+.gita-feature-reference {
+  color: rgba(25, 52, 58, 0.88);
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.gita-feature-original,
 .gita-feature-translation,
 .gita-feature-commentary {
+  margin: 0;
   padding: 0.95rem 1rem;
   border-radius: 16px;
   background: rgba(252, 248, 242, 0.82);
   backdrop-filter: blur(14px);
 }
 
-.gita-feature-translation {
-  margin: auto 0 0;
+.gita-feature-original {
+  font-family: "Cormorant Garamond", "Noto Serif Telugu", "Times New Roman", serif;
+  font-size: 1.1rem;
+  line-height: 1.45;
+  white-space: pre-line;
 }
 
 .gita-feature-translation {
   font-size: 1.05rem;
-  line-height: 1.75;
+  line-height: 1.68;
 }
 
 .gita-feature-commentary {
-  margin: 0.7rem 0 0;
+  color: rgba(25, 52, 58, 0.78);
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
 .site-footer {
