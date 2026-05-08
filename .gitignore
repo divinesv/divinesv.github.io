@@ -1,11 +1,9 @@
-# build output
-/.next/
-/out/
-/dist/
-/.astro/
-
 # dependencies
-node_modules/
+/node_modules
+
+# Next.js build output
+/.next
+/out
 
 # logs
 *.log
@@ -15,28 +13,16 @@ yarn-error.log*
 pnpm-debug.log*
 
 # environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env.production
+.env*
+
+# deployment metadata
 .vercel
 
-# macOS-specific files
+# editor and OS files
 .DS_Store
-
-# editor settings
 .vscode/
-
-# jetbrains setting folder
 .idea/
 
-# test/build caches
+# coverage and TypeScript cache
 coverage/
 *.tsbuildinfo
-
-# local asset/source bins not used by the exported app
-/images/
-/pdfs/
-/music/
